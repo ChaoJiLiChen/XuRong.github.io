@@ -1,0 +1,117 @@
+git是什么 有什么用处 以及git的历史就不介绍了 都可以从各种百科上面查到 下面直接写git的基本操作
+
+# 下载安装
+这一步也就跳过了 下载安装没有什么困难的
+判断是否安装完成
+在命令行中输入git 如果出现下面的提示那就说明安装完成了
+![](https://upload-images.jianshu.io/upload_images/12544275-fac66d4a51b5d7bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+# git具体命令
+## 第一步
+- 新建一个文件夹
+mkdir test(创建文件夹test)
+cd test（进入到该文件夹）
+touch a.md（新建a.md）
+
+- git status
+查看当前目录的状态
+![](https://upload-images.jianshu.io/upload_images/12544275-c85d792361d85cab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+意思是现在还不是一个git目录
+
+- 初始化git仓库
+git init
+![](https://upload-images.jianshu.io/upload_images/12544275-bc122d18b42932d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+可以看到初始化成功 
+
+- 再次输入git status 查看状态
+![](https://upload-images.jianshu.io/upload_images/12544275-827b9d50bde8abc4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+大部分的单词都认识 需要注意的是Untracked files 意思是说a.md这个文件还没有被跟踪 还没有提交到仓库中 并且提示可以用git add命令去操作想要提交的文件
+
+- git add
+我们先随意编辑下a.md然后输入 git add a.md
+然后在输入git status 看下当前的状态
+![](https://upload-images.jianshu.io/upload_images/12544275-18bd1d9884b58ef7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+此时可以看到Changes to be committed 意识是有文件等待被提交 等待的文件在下面有列出来 即是我们刚刚修改的a.md这个文件
+同样提示我们可以采用git rm --cached 这个命令区移除这个缓存
+
+- git commit 
+接着我们输入 git commit -m "first commit" 
+commit 是提交的意思 m代表提交的信息 即我们可以后后面添加本次提交的说明 这次的说明就是 first commit 
+这是我们在输入 git status 会提示nothing to commit
+![](https://upload-images.jianshu.io/upload_images/12544275-cb78c3ee5ead2855.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+- git log
+输入git log可以看到提交的日志
+并且可以看到提交的附加信息为 "first commit"
+![](https://upload-images.jianshu.io/upload_images/12544275-33b916502bc74968.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+- git add 和 git commit 
+这两步可以合并为一步 但是不建议这么使用 防止误提交
+
+- git branch
+branch即使分支的意思 
+git init之后会有一个默认主分支 master 
+git branch 查看当前的分支情况
+![image.png](https://upload-images.jianshu.io/upload_images/12544275-305efbe21d657928.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+创建分支
+git branch a 就新建了一个名为a的分支
+再次查看分支情况
+![](https://upload-images.jianshu.io/upload_images/12544275-e0f585a31bcca2b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+分支前面有一个*号 表示当前在这个分支下
+切换分支
+git checkout a
+创建切换分支一步到位
+git checkout -b a
+
+- 合并分支
+git merge
+首先切换到要合并的的目标分支 执行git merge a 意思是将a分支的代码合并过来
+
+- 删除分支
+git branch -d a 把a这个分支给删除
+
+- 强制删除
+有时会删除失败
+git branch -D a 把a这个分支强制删除
+
+- 创建当前代码的版本号
+git tag 
+在当前代码状态 git tag v1.0 就代表了在当前代码状态下新建了一个v1.0的标签
+git tag可以查看历史tag记录
+
+# 以上都是在脱机环境下进行的 下面记录是真实链接到gitub云的情况
+- SSH
+首先先介绍ssh的概念  ssh类似于一种授权 ssh是一种网络协议 用于计算机之间的加密登陆 
+
+- 生产 SSH key
+正常情况下Linux和Mac是默认安装ssh的，现在的实验环境和书写环境均是Mac，所以一下的所欲步骤均按照Mac来进行。正常情况下Windows的步骤是差不多的，如果有不同的地方会进行说明。
+在终端中输入ssh 如果出现来以下提示说明本机已经安装来ssh 。否则自行搜索安装ssh
+![](https://upload-images.jianshu.io/upload_images/12544275-ceb10f2dcf9eb959.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+windows下是在Git Bash中进行输入的。
+接着输入ssh-keygen -t rsa 指定用rsa算法生产秘钥，连续三个回车，密码不需要输入。系统会自动生成两个文件 id_rsa 和 id_rsa.pub。其中 id_rsa是秘钥，id_rsa.pub是公钥。Linux/Mac 可以在～/.ssh下找到，win下在/c/Documents and Settings/username/.ssh下找到，需要注意的是他们都是隐藏文件。
+在本地生产秘钥和公钥就完成来，接下来就是要把公钥 id_rsa.pub 添加到GitHub 上，本地的秘钥和公钥进行配对，授权成功才可以提交代码。
+- 在GitHub 上添加 SSH key
+
+- 未完待续  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
